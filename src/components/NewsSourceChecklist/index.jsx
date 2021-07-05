@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     Checkbox,
     VStack,
@@ -10,6 +10,7 @@ import {
 
 import {CheckIcon} from "@chakra-ui/icons"
 import {useStockNews} from "../../contexts/useStockNews";
+import {set} from "react-hook-form";
 
 const Source = ({title}) => {
     return (
@@ -23,6 +24,9 @@ const Source = ({title}) => {
 
 const NewsSourceChecklist = () => {
     const {allNewsSources} = useStockNews();
+    const {selectNews} = useStockNews();
+
+    const [checkedItems, setCheckedItems] = useState([true,true,true,true,true,true,true,true])
 
     return (
         <>
@@ -31,8 +35,22 @@ const NewsSourceChecklist = () => {
                     <Button>Check All</Button>
                     <Button>Uncheck All</Button>
                 </HStack>
-                {allNewsSources.map((newsSource) => (
-                    <Checkbox key={newsSource} value={newsSource} defaultIsChecked>
+                {allNewsSources.map((newsSource, index) => (
+                    <Checkbox
+                        key={newsSource}
+                        value={newsSource}
+                        isChecked={checkedItems[index]}
+                        onChange={(e) => {
+                            setCheckedItems([e.target.checked, checkedItems[index]])
+                            // if (this.isChecked) {
+                            //     // allNewsSources --> add this source
+                            //     // selectNews()
+                            //     return;
+                            // }
+                            // allNewsSources --> remove this source
+                            // selectNews()
+                        }}
+                    >
                         {newsSource}
                     </Checkbox>
                 ))}

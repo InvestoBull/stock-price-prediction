@@ -26,15 +26,22 @@ const StockNewsProvider = ({children}) => {
         })
     }
 
-    const resetNews = (sources) => {
+    const reorderNews = (sources) => {
         axios.post(`http://localhost:3000/stock-news/news/allNewsSources`, {sources}).then((response) => {
             setAllNewsSources(response.data);
         })
         console.log("reset")
     }
 
+    const selectNews = (sources) => {
+        axios.post(`http://localhost:3000/stock-news/news/selectNews`, {sources}).then((response) => {
+            setAllNewsSources(response.data);
+        })
+        console.log("select")
+    }
+
     return (
-        <StockNewsContext.Provider value={{stockNews, allNewsSources, allNewsInfo, setNewsInfo, setNewsSources, setNews, resetNews}}>
+        <StockNewsContext.Provider value={{stockNews, allNewsSources, allNewsInfo, setNewsInfo, setNewsSources, setNews, reorderNews}}>
             {children}
         </StockNewsContext.Provider>
     )

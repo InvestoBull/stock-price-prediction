@@ -6,7 +6,7 @@ import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd"
 
 const NewsGrid = () => {
     const {allNewsSources} = useStockNews();
-    const {resetNews} = useStockNews();
+    const {reorderNews} = useStockNews();
 
     const reorder = (list, startIndex, endIndex) => {
         const result = [...list];
@@ -24,7 +24,7 @@ const NewsGrid = () => {
             if (source.index === destination.index && source.droppableId === destination.droppableId) {
                 return;
             }
-            resetNews(reorder(allNewsSources, source.index, destination.index))
+            reorderNews(reorder(allNewsSources, source.index, destination.index))
         }}>
             <Droppable droppableId="newsGrid">
                 {(droppableProvided) => (

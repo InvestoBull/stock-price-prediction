@@ -196,4 +196,10 @@ router.post('/allNewsSources', function (req, res) {
     res.send(newsSources)
 });
 
+router.post('/selectNews', function (req, res) {
+    const selectedNewsSources = req.body;
+    newsSources.filter(source => !selectedNewsSources.includes(source))
+    res.send(newsSources)
+});
+
 module.exports = router;
