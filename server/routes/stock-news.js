@@ -1,19 +1,53 @@
 var express = require('express');
 var router = express.Router();
 
-let newsSources = [
-    "Bloomberg",
-    "Financial Post",
-    "Financial Times",
-    "The Economist",
-    "The Global and Mail",
-    "The New York Times",
-    "The Wall Street Journal",
-    "Time"
+let newsSelections = [
+    // store in firestore
+    {
+        id: "0",
+        name: "Bloomberg",
+        selected: true
+    },
+    {
+        id: "1",
+        name: "Financial Post",
+        selected: true
+    },
+    {
+        id: "2",
+        name: "Financial Times",
+        selected: true
+    },
+    {
+        id: "3",
+        name: "The Economist",
+        selected: true
+    },
+    {
+        id: "4",
+        name: "The Global and Mail",
+        selected: true
+    },
+    {
+        id: "5",
+        name: "The New York Times",
+        selected: true
+    },
+    {
+        id: "6",
+        name: "The Wall Street Journal",
+        selected: true
+    },
+    {
+        id: "7",
+        name: "Time",
+        selected: true
+    }
 ]
 
-const newsInfo = [
+const newsMasterlist = [
     {
+        id: "0",
         name: "Bloomberg",
         articles: [
             {
@@ -29,6 +63,7 @@ const newsInfo = [
         ]
     },
     {
+        id: "1",
         name: "Financial Post",
         articles: [
             {
@@ -44,6 +79,7 @@ const newsInfo = [
         ]
     },
     {
+        id: "2",
         name: "Financial Times",
         articles: [
             {
@@ -59,6 +95,7 @@ const newsInfo = [
         ]
     },
     {
+        id: "3",
         name: "The Economist",
         articles: [
             {
@@ -74,6 +111,7 @@ const newsInfo = [
         ]
     },
     {
+        id: "4",
         name: "The Global and Mail",
         articles: [
             {
@@ -89,6 +127,7 @@ const newsInfo = [
         ]
     },
     {
+        id: "5",
         name: "The New York Times",
         articles: [
             {
@@ -104,6 +143,7 @@ const newsInfo = [
         ]
     },
     {
+        id: "6",
         name: "The Wall Street Journal",
         articles: [
             {
@@ -119,6 +159,7 @@ const newsInfo = [
         ]
     },
     {
+        id: "7",
         name: "Time",
         articles: [
             {
@@ -183,23 +224,25 @@ router.get('/news/:ticker', function (req, res) {
     res.send(news.length === 1 ? news[0] : defaultNews)
 });
 
-router.get('/allNewsSources', function (req, res) {
-    res.send(newsSources)
+router.get('/newsSelections', function (req, res) {
+    // filter: get all the ones where userSelections "isChecked" = true
+    // should probably implement same check for all other methods here
+    res.send(newsSelections)
 });
 
-router.get('/allNewsInfo', function (req, res) {
-    res.send(newsInfo)
+router.get('/newsMasterlist', function (req, res) {
+    res.send(newsMasterlist)
 });
 
-router.post('/allNewsSources', function (req, res) {
-    newsSources = req.body;
-    res.send(newsSources)
+router.post('/newsSelections', function (req, res) {
+    newsSelections = req.body;
+    res.send(newsSelections)
 });
 
 router.post('/selectNews', function (req, res) {
     const selectedNewsSources = req.body;
-    newsSources.filter(source => !selectedNewsSources.includes(source))
-    res.send(newsSources)
+    newsSelections.filter(source => !selectedNewsSources.includes(source))
+    res.send(newsSelections)
 });
 
 module.exports = router;
