@@ -5,7 +5,7 @@ import {useStockNews} from "../../contexts/useStockNews";
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd"
 
 const NewsGrid = () => {
-    const {allNewsSources} = useStockNews();
+    const {newsSelections} = useStockNews();
     const {reorderNews} = useStockNews();
 
     const reorder = (list, startIndex, endIndex) => {
@@ -24,7 +24,7 @@ const NewsGrid = () => {
             if (source.index === destination.index && source.droppableId === destination.droppableId) {
                 return;
             }
-            reorderNews(reorder(allNewsSources, source.index, destination.index))
+            reorderNews(reorder(newsSelections, source.index, destination.index))
         }}>
             <Droppable droppableId="newsGrid">
                 {(droppableProvided) => (
@@ -35,16 +35,16 @@ const NewsGrid = () => {
                             columns={{base: 1, sm: 2, md: 3, lg: 4}}
                             spacing={3}>
                             {
-                                allNewsSources.map((newsSource, index) => (
-                                    <Draggable key={newsSource} draggableId={newsSource} index={index}>
+                                newsSelections.map((source, index) => (
+                                    <Draggable key={source.id} draggableId={source.id} index={index}>
                                         {(draggableProvided) => (
                                             <div
                                                 {...draggableProvided.draggableProps}
                                                 ref={draggableProvided.innerRef}
                                                 {...draggableProvided.dragHandleProps}>
                                                 <NewsCard
-                                                    key={newsSource}
-                                                    source={newsSource}/>
+                                                    key={source.id}
+                                                    source={source.name}/>
                                             </div>
                                         )}
                                     </Draggable>

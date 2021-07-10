@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+// store in firestore
 let newsSelections = [
-    // store in firestore
     {
         id: "0",
         name: "Bloomberg",
@@ -234,14 +234,22 @@ router.get('/newsMasterlist', function (req, res) {
     res.send(newsMasterlist)
 });
 
-router.post('/newsSelections', function (req, res) {
-    newsSelections = req.body;
+router.post('/reorderNews', function (req, res) {
+    const {sources} = req.body
+    newsSelections = sources;
     res.send(newsSelections)
 });
 
 router.post('/selectNews', function (req, res) {
     const selectedNewsSources = req.body;
-    newsSelections.filter(source => !selectedNewsSources.includes(source))
+    newsSelections.filter(source => selectedNewsSources.includes(source.id))
+    res.send(newsSelections)
+});
+
+router.post('/selectSingleNews', function (req, res) {
+    const {source} = req.body;
+    let targetSource = newsSelections.find(currSource => currSource.id === source.id)
+    targetSource.selected = !targetSource.selected
     res.send(newsSelections)
 });
 

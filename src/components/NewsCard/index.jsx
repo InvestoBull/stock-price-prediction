@@ -18,13 +18,13 @@ const NewsArticle = ({date, title, article}) => {
 const NewsCard = ({source, price, buttonText, details, ...otherProps}) => {
     const boxColor = useColorModeValue("brand.100", "brand.700");
 
-    const {allNewsInfo} = useStockNews();
+    const {newsMasterlist} = useStockNews();
 
-    let newsDetails = allNewsInfo.filter(newsInfo => newsInfo.name === source)
+    let newsDetails = newsMasterlist.filter(newsInfo => newsInfo.name === source)
     let newsArticles;
 
     if (newsDetails.length === 1) {
-        newsArticles = allNewsInfo.filter(newsInfo => newsInfo.name === source)[0].articles
+        newsArticles = newsMasterlist.filter(newsInfo => newsInfo.name === source)[0].articles
     } else {
         newsArticles = [];
     }

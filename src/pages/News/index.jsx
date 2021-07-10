@@ -13,11 +13,11 @@ const News = () => {
         setColor(color === "green" ? "red" : "green");
     }
 
-    const {setNewsSources, setNewsInfo, allNewsInfo} = useStockNews();
+    const {setNewsSelections2, setNewsMasterlist2} = useStockNews();
 
     useEffect(() => {
-        setNewsSources();
-        setNewsInfo();
+        setNewsSelections2();
+        setNewsMasterlist2();
     }, [])
 
     //TODO: enable watchlist filter

@@ -23,10 +23,8 @@ const Source = ({title}) => {
 }
 
 const NewsSourceChecklist = () => {
-    const {allNewsSources} = useStockNews();
-    const {selectNews} = useStockNews();
-
-    const [checkedItems, setCheckedItems] = useState([true,true,true,true,true,true,true,true])
+    const {newsSelections} = useStockNews();
+    const {selectSingleNews} = useStockNews();
 
     return (
         <>
@@ -35,23 +33,25 @@ const NewsSourceChecklist = () => {
                     <Button>Check All</Button>
                     <Button>Uncheck All</Button>
                 </HStack>
-                {allNewsSources.map((newsSource, index) => (
+                {newsSelections.map((source) => (
                     <Checkbox
-                        key={newsSource}
-                        value={newsSource}
-                        isChecked={checkedItems[index]}
-                        onChange={(e) => {
-                            setCheckedItems([e.target.checked, checkedItems[index]])
-                            // if (this.isChecked) {
-                            //     // allNewsSources --> add this source
-                            //     // selectNews()
-                            //     return;
-                            // }
-                            // allNewsSources --> remove this source
-                            // selectNews()
-                        }}
+                        key={source.id}
+                        value={source.name}
+                        isChecked={source.selected}
+                        // onChange={(e) => {
+                        //     setCheckedItems([e.target.checked, checkedItems[index]])
+                        //     // if (this.isChecked) {
+                        //     //     // newsSelections --> add this source
+                        //     //     // selectNews()
+                        //     //     return;
+                        //     // }
+                        //     // newsSelections --> remove this source
+                        //     // selectNews()
+                        // }}
+                        // onChange={selectSingleNews(source)}
+                        onChange={(e)=> selectSingleNews(source)}
                     >
-                        {newsSource}
+                        {source.name}
                     </Checkbox>
                 ))}
             </VStack>
