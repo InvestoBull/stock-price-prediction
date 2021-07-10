@@ -32,20 +32,37 @@ const StockNewsProvider = ({children}) => {
         })
     }
 
-    const selectNews = (sources) => {
-        axios.post(`http://localhost:3000/stock-news/selectNews`, {sources}).then((response) => {
+    const selectSource = (source) => {
+        axios.post(`http://localhost:3000/stock-news/selectSource`, {source}).then((response) => {
             setNewsSelections(response.data);
         })
     }
 
-    const selectSingleNews = (source) => {
-        axios.post(`http://localhost:3000/stock-news/selectSingleNews`, {source}).then((response) => {
+    const selectAllSources = () => {
+        axios.post(`http://localhost:3000/stock-news/selectAllSources`).then((response) => {
+            setNewsSelections(response.data);
+        })
+    }
+
+    const unselectAllSources = () => {
+        axios.post(`http://localhost:3000/stock-news/unselectAllSources`).then((response) => {
             setNewsSelections(response.data);
         })
     }
 
     return (
-        <StockNewsContext.Provider value={{stockNews, newsSelections, newsMasterlist, setNewsSelections2, setNewsMasterlist2, setNews, reorderNews, selectNews, selectSingleNews}}>
+        <StockNewsContext.Provider value={{
+            stockNews,
+            newsSelections,
+            newsMasterlist,
+            setNewsSelections2,
+            setNewsMasterlist2,
+            setNews,
+            reorderNews,
+            selectSource,
+            selectAllSources,
+            unselectAllSources
+        }}>
             {children}
         </StockNewsContext.Provider>
     )

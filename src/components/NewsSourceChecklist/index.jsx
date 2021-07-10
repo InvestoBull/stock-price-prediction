@@ -24,14 +24,16 @@ const Source = ({title}) => {
 
 const NewsSourceChecklist = () => {
     const {newsSelections} = useStockNews();
-    const {selectSingleNews} = useStockNews();
+    const {selectSource} = useStockNews();
+    const {selectAllSources} = useStockNews();
+    const {unselectAllSources} = useStockNews();
 
     return (
         <>
             <VStack align="stretch">
                 <HStack>
-                    <Button>Check All</Button>
-                    <Button>Uncheck All</Button>
+                    <Button onClick={() => selectAllSources()}>Check All</Button>
+                    <Button onClick={() => unselectAllSources()}>Uncheck All</Button>
                 </HStack>
                 {newsSelections.map((source) => (
                     <Checkbox
@@ -49,7 +51,7 @@ const NewsSourceChecklist = () => {
                         //     // selectNews()
                         // }}
                         // onChange={selectSingleNews(source)}
-                        onChange={(e)=> selectSingleNews(source)}
+                        onChange={(e)=> selectSource(source)}
                     >
                         {source.name}
                     </Checkbox>

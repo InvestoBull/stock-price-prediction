@@ -240,16 +240,23 @@ router.post('/reorderNews', function (req, res) {
     res.send(newsSelections)
 });
 
-router.post('/selectNews', function (req, res) {
-    const selectedNewsSources = req.body;
-    newsSelections.filter(source => selectedNewsSources.includes(source.id))
+router.post('/selectSource', function (req, res) {
+    const {source} = req.body;
+    let selectedSource = newsSelections.find(currSource => currSource.id === source.id)
+    selectedSource.selected = !selectedSource.selected
     res.send(newsSelections)
 });
 
-router.post('/selectSingleNews', function (req, res) {
-    const {source} = req.body;
-    let targetSource = newsSelections.find(currSource => currSource.id === source.id)
-    targetSource.selected = !targetSource.selected
+router.post('/selectAllSources', function (req, res) {
+    // newsSelections.map(source => source.selected === true)
+    newsSelections = newsSelections.map(({selected, ...rest}) => ({...rest, selected: true}))
+    console.log("select all")
+    res.send(newsSelections)
+});
+
+router.post('/unselectAllSources', function (req, res) {
+    newsSelections = newsSelections.map(({selected, ...rest}) => ({...rest, selected: false}))
+    console.log("unselect all")
     res.send(newsSelections)
 });
 
