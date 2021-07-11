@@ -55,7 +55,7 @@ const NewsGrid = () => {
                                                             <DragHandleIcon/>
                                                         </div>
                                                         <Spacer/>
-                                                        <CloseIcon onClick={() => selectSource(source)}/>
+                                                        <CloseIcon cursor={"pointer"} onClick={() => selectSource(source)}/>
                                                         {/*<div style={{width:"0px", height:"0px", paddingRight:"16px", paddingBottom:"19px", marginTop:"-6px"}}>*/}
                                                         {/*    <CloseIcon/>*/}
                                                         {/*</div>*/}
