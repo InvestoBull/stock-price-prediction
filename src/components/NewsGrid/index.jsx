@@ -9,7 +9,6 @@ const NewsGrid = () => {
     const {newsSelections} = useStockNews();
     const {reorderNews} = useStockNews();
     const {selectSource} = useStockNews();
-    const {clickXButton} = useStockNews();
 
     let visibleNewsCards = newsSelections.filter(source => source.selected === true);
 
@@ -50,15 +49,11 @@ const NewsGrid = () => {
                                                     key={source.id}
                                                     source={source}>
                                                     <Flex>
-                                                        {/*<div {...draggableProvided.dragHandleProps}>*/}
                                                         <div {...draggableProvided.dragHandleProps} style={{marginTop:"-6px"}}>
                                                             <DragHandleIcon/>
                                                         </div>
                                                         <Spacer/>
                                                         <CloseIcon cursor={"pointer"} onClick={() => selectSource(source)}/>
-                                                        {/*<div style={{width:"0px", height:"0px", paddingRight:"16px", paddingBottom:"19px", marginTop:"-6px"}}>*/}
-                                                        {/*    <CloseIcon/>*/}
-                                                        {/*</div>*/}
                                                     </Flex>
                                                 </NewsCard>
                                             </div>

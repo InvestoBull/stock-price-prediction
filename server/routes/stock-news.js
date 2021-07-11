@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-// store in firestore
 let newsSelections = [
     {
         id: "0",
@@ -225,8 +224,6 @@ router.get('/news/:ticker', function (req, res) {
 });
 
 router.get('/newsSelections', function (req, res) {
-    // filter: get all the ones where userSelections "isChecked" = true
-    // should probably implement same check for all other methods here
     res.send(newsSelections)
 });
 
@@ -248,9 +245,7 @@ router.post('/selectSource', function (req, res) {
 });
 
 router.post('/selectAllSources', function (req, res) {
-    // newsSelections.map(source => source.selected === true)
     newsSelections = newsSelections.map(({selected, ...rest}) => ({...rest, selected: true}))
-    console.log("select all")
     res.send(newsSelections)
 });
 
@@ -258,12 +253,5 @@ router.post('/unselectAllSources', function (req, res) {
     newsSelections = newsSelections.map(({selected, ...rest}) => ({...rest, selected: false}))
     res.send(newsSelections)
 });
-
-// router.post('/clickXButton', function (req, res) {
-//     const {source} = req.body;
-//     let targetSource = newsSelections.find(currSource => currSource.id === source.id)
-//     targetSource.selected = false
-//     res.send(newsSelections)
-// });
 
 module.exports = router;
