@@ -1,12 +1,15 @@
 import React from 'react';
-import {SimpleGrid} from '@chakra-ui/react';
+import {Flex, SimpleGrid, Spacer} from '@chakra-ui/react';
 import NewsCard from "../NewsCard";
 import {useStockNews} from "../../contexts/useStockNews";
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd"
+import {CloseIcon, DragHandleIcon} from "@chakra-ui/icons";
 
 const NewsGrid = () => {
     const {newsSelections} = useStockNews();
     const {reorderNews} = useStockNews();
+
+    let visibleNewsCards = newsSelections.filter(source => source.selected === true);
 
     const reorder = (list, startIndex, endIndex) => {
         const result = [...list];
@@ -35,20 +38,32 @@ const NewsGrid = () => {
                             columns={{base: 1, sm: 2, md: 3, lg: 4}}
                             spacing={3}>
                             {
-                                newsSelections.map((source, index) => (
+                                visibleNewsCards.map((source, index) => (
                                     <Draggable key={source.id} draggableId={source.id} index={index}>
                                         {(draggableProvided) => (
                                             <div
                                                 {...draggableProvided.draggableProps}
-                                                ref={draggableProvided.innerRef}
-                                                {...draggableProvided.dragHandleProps}>
+                                                ref={draggableProvided.innerRef}>
                                                 <NewsCard
                                                     key={source.id}
-                                                    source={source.name}/>
+                                                    source={source}>
+                                                    <Flex>
+                                                        {/*<div {...draggableProvided.dragHandleProps}>*/}
+                                                        <div {...draggableProvided.dragHandleProps} style={{marginTop:"-6px"}}>
+                                                            <DragHandleIcon/>
+                                                        </div>
+                                                        <Spacer/>
+                                                        <CloseIcon/>
+                                                        {/*<div style={{width:"0px", height:"0px", paddingRight:"16px", paddingBottom:"19px", marginTop:"-6px"}}>*/}
+                                                        {/*    <CloseIcon/>*/}
+                                                        {/*</div>*/}
+                                                    </Flex>
+                                                </NewsCard>
                                             </div>
                                         )}
                                     </Draggable>
-                                ))}
+                                ))
+                            }
                         </SimpleGrid>
                         {droppableProvided.placeholder}
                     </div>

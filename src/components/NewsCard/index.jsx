@@ -1,9 +1,9 @@
 import React from 'react';
-import {Box, Link, Text, useColorModeValue, VStack} from '@chakra-ui/react';
+import {Box, Flex, Link, Spacer, Text, useColorModeValue, VStack} from '@chakra-ui/react';
 import {useStockNews} from "../../contexts/useStockNews";
+import {CloseIcon, DragHandleIcon} from "@chakra-ui/icons";
 
 const NewsArticle = ({date, title, article}) => {
-
     return (
         <VStack
             spacing="0px"
@@ -15,35 +15,35 @@ const NewsArticle = ({date, title, article}) => {
     )
 }
 
-const NewsCard = ({source, price, buttonText, details, ...otherProps}) => {
+const NewsCard = ({source, children, ...otherProps}) => {
     const boxColor = useColorModeValue("brand.100", "brand.700");
 
     const {newsMasterlist} = useStockNews();
 
-    let newsDetails = newsMasterlist.filter(newsInfo => newsInfo.name === source)
-    let newsArticles;
+    let name;
+    let articles;
 
-    if (newsDetails.length === 1) {
-        newsArticles = newsMasterlist.filter(newsInfo => newsInfo.name === source)[0].articles
+    let targetSource = newsMasterlist.find(currSource => currSource.id === source.id)
+    if (targetSource !== undefined) {
+        name = targetSource.name;
+        articles = targetSource.articles;
     } else {
-        newsArticles = [];
+        name = "";
+        articles = [];
     }
 
-    //TODO: implement drag/drop and x icon
     return (
         <Box mx={3} mt={5} px={4} py={4} border="1px" borderColor="brand.400" borderRadius="lg" shadow="md" bg={boxColor} {...otherProps}>
-            {/*<Flex>*/}
-            {/*    <DragHandleIcon/>*/}
-            {/*    <Spacer/>*/}
-            {/*    <CloseIcon/>*/}
-            {/*</Flex>*/}
-            <Text align="center" mt="5px" fontSize="xl" fontWeight="bold">{source}</Text>
-
+            {children}
+            <Text align="center" mt="5px" fontSize="xl" fontWeight="bold" dhp>{name}</Text>
             <VStack align="flex-start">
                 {
-                    newsArticles.map(article => <NewsArticle date={article.date} title={article.title}
-                                                             article={article.src}/>)
-                }
+                    articles.map(article =>
+                        <NewsArticle
+                        date={article.date}
+                        title={article.title}
+                        article={article.src}/>
+                    )}
             </VStack>
         </Box>
     )

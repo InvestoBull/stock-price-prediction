@@ -45,7 +45,7 @@ let newsSelections = [
     }
 ]
 
-const newsMasterlist = [
+let newsMasterlist = [
     {
         id: "0",
         name: "Bloomberg",
@@ -256,7 +256,6 @@ router.post('/selectAllSources', function (req, res) {
 
 router.post('/unselectAllSources', function (req, res) {
     newsSelections = newsSelections.map(({selected, ...rest}) => ({...rest, selected: false}))
-    console.log("unselect all")
     res.send(newsSelections)
 });
 
