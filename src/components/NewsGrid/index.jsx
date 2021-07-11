@@ -8,6 +8,8 @@ import {CloseIcon, DragHandleIcon} from "@chakra-ui/icons";
 const NewsGrid = () => {
     const {newsSelections} = useStockNews();
     const {reorderNews} = useStockNews();
+    const {selectSource} = useStockNews();
+    const {clickXButton} = useStockNews();
 
     let visibleNewsCards = newsSelections.filter(source => source.selected === true);
 
@@ -53,7 +55,7 @@ const NewsGrid = () => {
                                                             <DragHandleIcon/>
                                                         </div>
                                                         <Spacer/>
-                                                        <CloseIcon/>
+                                                        <CloseIcon onClick={() => selectSource(source)}/>
                                                         {/*<div style={{width:"0px", height:"0px", paddingRight:"16px", paddingBottom:"19px", marginTop:"-6px"}}>*/}
                                                         {/*    <CloseIcon/>*/}
                                                         {/*</div>*/}

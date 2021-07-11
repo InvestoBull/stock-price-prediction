@@ -259,4 +259,11 @@ router.post('/unselectAllSources', function (req, res) {
     res.send(newsSelections)
 });
 
+// router.post('/clickXButton', function (req, res) {
+//     const {source} = req.body;
+//     let targetSource = newsSelections.find(currSource => currSource.id === source.id)
+//     targetSource.selected = false
+//     res.send(newsSelections)
+// });
+
 module.exports = router;

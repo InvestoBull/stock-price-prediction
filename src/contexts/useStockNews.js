@@ -50,6 +50,12 @@ const StockNewsProvider = ({children}) => {
         })
     }
 
+    // const clickXButton = (source) => {
+    //     axios.post(`http://localhost:3000/stock-news/clickXButton`, {source}).then((response) => {
+    //         setNewsSelections(response.data);
+    //     })
+    // }
+
     return (
         <StockNewsContext.Provider value={{
             stockNews,
