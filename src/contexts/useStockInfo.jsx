@@ -14,10 +14,16 @@ const StockInfoProvider = ({children}) => {
     const [stockName, setStockName] = useState('')
     const [graphData, setGraphData] = useState('')
     const [isLoading, setIsLoading] = useStateWithCallbackLazy(false)
+    const [isHomeLoading, setIsHomeLoading] = useStateWithCallbackLazy(false)
+    const [isLivePriceLoading, setIsLivePriceLoading] = useStateWithCallbackLazy(false)
+    const [isStockGraphLoading, setIsStockGraphLoading] = useStateWithCallbackLazy(false)
 
     useEffect(() => {
-        axios.get(`/stock-details/`).then(response => {
-            setBasicStockInfo(response.data)
+        setIsHomeLoading(true, () => {
+            axios.get(`/stock-details/`).then(response => {
+                setBasicStockInfo(response.data)
+                setIsHomeLoading(false, null)
+            })
         })
     }, []);
 
@@ -41,9 +47,12 @@ const StockInfoProvider = ({children}) => {
     }
 
     const setRealtimeDetails = ticker => {
-        axios.get(`/stock-details/realtime-data/${ticker}`).then(response => {
-            setRealtimeStockDetails(response.data.stock_details);
-            setStockName(response.data.stock_name)
+        setIsLivePriceLoading(true, () => {
+            axios.get(`/stock-details/realtime-data/${ticker}`).then(response => {
+                setRealtimeStockDetails(response.data.stock_details);
+                setStockName(response.data.stock_name)
+                setIsLivePriceLoading(false, null)
+            })
         })
     }
 
@@ -55,8 +64,11 @@ const StockInfoProvider = ({children}) => {
     }
 
     const setRealtimeGraphData = ticker => {
-        axios.get(`/realtime-graph/${ticker}`).then(response => {
-            setGraphData(response.data);
+        setIsStockGraphLoading(true, () => {
+            axios.get(`/realtime-graph/${ticker}`).then(response => {
+                setGraphData(response.data);
+                setIsStockGraphLoading(false, null)
+            })
         })
     }
 
@@ -90,6 +102,9 @@ const StockInfoProvider = ({children}) => {
             setBasicStockInfo,
             setWatchlistStockInfo,
             isLoading,
+            isHomeLoading,
+            isLivePriceLoading,
+            isStockGraphLoading,
             getWatchlistStockInfo,
             setRealtimeDetails,
             setQuarterlyDetails,

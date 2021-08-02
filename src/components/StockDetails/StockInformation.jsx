@@ -14,6 +14,7 @@ import {
     Tr,
     useColorModeValue
 } from "@chakra-ui/react";
+import LoadingSpinner from "../LoadingSpinner";
 
 const StockDataEnclosure = ({children}) => (
     <Box mx={4}>
@@ -159,19 +160,24 @@ const LivePrice = () => {
     )
 }
 
-const StockInformation = () => (
-    <SimpleGrid columns={{base: 1, lg: 3}} spacing={8} bgColor={useColorModeValue("brand.100", "brand.700")}
-                mt={8} p={4} borderRadius="lg">
-        <StockDataEnclosure>
-            <LivePrice/>
-        </StockDataEnclosure>
-        <StockDataEnclosure>
-            <QuarterlyStockData/>
-        </StockDataEnclosure>
-        <StockDataEnclosure>
-            <QuarterlyStockDataContinued/>
-        </StockDataEnclosure>
-    </SimpleGrid>
-)
+const StockInformation = () => {
+    const {isLivePriceLoading} = useStockSymbol()
+    return (
+        <SimpleGrid columns={{base: 1, lg: 3}} spacing={8} bgColor={useColorModeValue("brand.100", "brand.700")}
+                    mt={8} p={4} borderRadius="lg">
+            {isLivePriceLoading ?
+                <LoadingSpinner/> :
+                <StockDataEnclosure>
+                    <LivePrice/>
+                </StockDataEnclosure>}
+            <StockDataEnclosure>
+                <QuarterlyStockData/>
+            </StockDataEnclosure>
+            <StockDataEnclosure>
+                <QuarterlyStockDataContinued/>
+            </StockDataEnclosure>
+        </SimpleGrid>
+    )
+}
 
 export default StockInformation;
