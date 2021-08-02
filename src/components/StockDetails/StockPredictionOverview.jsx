@@ -5,14 +5,15 @@ import {useStockSymbol} from "../../contexts/useStockInfo";
 import LoadingSpinner from "../LoadingSpinner";
 
 const StockDataGraph = () => {
-    const {graphData} = useStockSymbol()
+    const {graphData, isStockGraphLoading} = useStockSymbol()
     defaults.color = useColorModeValue("#000", "#FFF")
     defaults.borderColor = useColorModeValue("#CCC", "#555")
-    const {isStockGraphLoading} = useStockSymbol()
 
     return (
         <Box mt={10} p={4} bgColor={useColorModeValue("brand.100", "brand.700")} borderRadius='lg'>
-            {isStockGraphLoading ? <LoadingSpinner/> : <Line data={graphData}/>}
+            {isStockGraphLoading ?
+                <LoadingSpinner/> :
+                <Line data={graphData}/>}
         </Box>
     )
 }

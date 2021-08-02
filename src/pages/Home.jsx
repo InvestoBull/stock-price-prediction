@@ -5,10 +5,9 @@ import {VStack} from "@chakra-ui/react";
 import StockSearchBar from "../components/StockTable/StockSearchBar";
 import StockInfoTable from "../components/StockTable/StockInfoTable";
 import {useStockSymbol} from "../contexts/useStockInfo";
-import LoadingSpinner from "../components/LoadingSpinner";
 
 const Home = () => {
-    const {basicStockInfo, filterStocks, sortStocks, setBasicStockInfo, isHomeLoading} = useStockSymbol()
+    const {basicStockInfo, filterStocks, sortStocks, setBasicStockInfo} = useStockSymbol()
     const [filterKeyword, setFilterKeyword] = useState()
 
     const handleSortClick = key => {
@@ -32,10 +31,7 @@ const Home = () => {
             <VStack spacing={16} m={4}>
                 <CustomHeading>Stock Market Overview</CustomHeading>
                 <StockSearchBar handleChange={handleChange} handleCancel={handleCancel} keyword={{filterKeyword}}/>
-                {
-                    isHomeLoading ? <LoadingSpinner/> :
-                        <StockInfoTable stocks={basicStockInfo} handleSortClick={handleSortClick}/>
-                }
+                <StockInfoTable stocks={basicStockInfo} handleSortClick={handleSortClick}/>
             </VStack>
         </PageTemplate>
     )

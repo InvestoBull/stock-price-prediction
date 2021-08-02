@@ -8,21 +8,21 @@ const StockInfoContext = createContext({});
 const StockInfoProvider = ({children}) => {
     const [basicStockInfo, setBasicStockInfo] = useState([])
     const [watchlistStockInfo, setWatchlistStockInfo] = useState([])
-    const [stockDetails, setStockDetails] = useState({});
     const [realtimeStockDetails, setRealtimeStockDetails] = useState({});
     const [quarterlyStockDetails, setQuarterlyStockDetails] = useState({});
     const [stockName, setStockName] = useState('')
     const [graphData, setGraphData] = useState('')
     const [isLoading, setIsLoading] = useStateWithCallbackLazy(false)
-    const [isHomeLoading, setIsHomeLoading] = useStateWithCallbackLazy(false)
-    const [isLivePriceLoading, setIsLivePriceLoading] = useStateWithCallbackLazy(false)
+    const [isStockInfoTableLoading, setIsStockInfoTableLoading] = useStateWithCallbackLazy(false)
+    const [isRealtimeDataLoading, setIsRealtimeDataLoading] = useStateWithCallbackLazy(false)
+    const [isQuarterlyDataLoading, setIsQuarterlyDataLoading] = useStateWithCallbackLazy(false)
     const [isStockGraphLoading, setIsStockGraphLoading] = useStateWithCallbackLazy(false)
 
     useEffect(() => {
-        setIsHomeLoading(true, () => {
+        setIsStockInfoTableLoading(true, () => {
             axios.get(`/stock-details/`).then(response => {
                 setBasicStockInfo(response.data)
-                setIsHomeLoading(false, null)
+                setIsStockInfoTableLoading(false, null)
             })
         })
     }, []);
@@ -40,26 +40,23 @@ const StockInfoProvider = ({children}) => {
         })
     }
 
-    const setSymbol = stockSymbol => {
-        axios.get(`/stock-details/${stockSymbol}`).then(response => {
-            setStockDetails(response.data);
-        })
-    }
-
     const setRealtimeDetails = ticker => {
-        setIsLivePriceLoading(true, () => {
+        setIsRealtimeDataLoading(true, () => {
             axios.get(`/stock-details/realtime-data/${ticker}`).then(response => {
                 setRealtimeStockDetails(response.data.stock_details);
                 setStockName(response.data.stock_name)
-                setIsLivePriceLoading(false, null)
+                setIsRealtimeDataLoading(false, null)
             })
         })
     }
 
     const setQuarterlyDetails = ticker => {
-        axios.get(`/stock-details/quarterly-data/${ticker}`).then(response => {
-            setQuarterlyStockDetails(response.data.stock_details);
-            setStockName(response.data.stock_name)
+        setIsQuarterlyDataLoading(true, () => {
+            axios.get(`/stock-details/quarterly-data/${ticker}`).then(response => {
+                setQuarterlyStockDetails(response.data.stock_details);
+                setStockName(response.data.stock_name)
+                setIsQuarterlyDataLoading(false, null)
+            })
         })
     }
 
@@ -93,7 +90,6 @@ const StockInfoProvider = ({children}) => {
     return (
         <StockInfoContext.Provider value={{
             stockName,
-            stockDetails,
             realtimeStockDetails,
             quarterlyStockDetails,
             graphData,
@@ -102,14 +98,14 @@ const StockInfoProvider = ({children}) => {
             setBasicStockInfo,
             setWatchlistStockInfo,
             isLoading,
-            isHomeLoading,
-            isLivePriceLoading,
+            isStockInfoTableLoading,
+            isRealtimeDataLoading,
             isStockGraphLoading,
+            isQuarterlyDataLoading,
             getWatchlistStockInfo,
             setRealtimeDetails,
             setQuarterlyDetails,
             setRealtimeGraphData,
-            setSymbol,
             filterStocks,
             sortStocks
         }}>

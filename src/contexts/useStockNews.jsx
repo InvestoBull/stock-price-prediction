@@ -1,5 +1,6 @@
 import React, {createContext, useContext, useState} from "react";
 import axios from "axios";
+import {useStateWithCallbackLazy} from "use-state-with-callback";
 
 const StockNewsContext = createContext({});
 
@@ -7,13 +8,17 @@ const StockNewsProvider = ({children}) => {
     const [stockNews, setStockNews] = useState([]);
     const [newsSelections, setNewsSelections] = useState([]);
     const [newsInfo, setNewsInfo] = useState([])
+    const [isStockNewsLoading, setIsStockNewsLoading] = useStateWithCallbackLazy(false)
 
     const setNews = (stockSymbol) => {
-        axios
-            .get(`/stock-news/news/${stockSymbol}`)
-            .then((response) => {
-                setStockNews(response.data.news);
-            });
+        setIsStockNewsLoading(true, () => {
+            axios
+                .get(`/stock-news/news/${stockSymbol}`)
+                .then((response) => {
+                    setStockNews(response.data.news);
+                    setIsStockNewsLoading(false, null)
+                });
+        })
     };
 
     const setNewsSelectionsFromFirebase = () => {
@@ -70,6 +75,7 @@ const StockNewsProvider = ({children}) => {
                 stockNews,
                 newsSelections,
                 newsInfo,
+                isStockNewsLoading,
                 setNewsSelectionsFromFirebase,
                 setNewsInfoFromMongo,
                 setNews,

@@ -6,17 +6,16 @@ import {useUser} from "../contexts/useUser";
 import CustomBox from "../components/CustomBox";
 import StockInfoTable from "../components/StockTable/StockInfoTable";
 import {useStockSymbol} from "../contexts/useStockInfo";
-import LoadingSpinner from "../components/LoadingSpinner";
 
 const Watchlist = () => {
     const {user, watchlist} = useUser()
-    const {getWatchlistStockInfo, watchlistStockInfo, sortStocks, setWatchlistStockInfo, isLoading} = useStockSymbol()
+    const {getWatchlistStockInfo, watchlistStockInfo, sortStocks, setWatchlistStockInfo} = useStockSymbol()
 
     useEffect(() => {
         const tickers = []
         watchlist.forEach(({ticker}) => tickers.push(ticker))
         getWatchlistStockInfo(tickers)
-    },[watchlist])
+    }, [watchlist])
 
     const handleSortClick = key => {
         sortStocks(watchlistStockInfo, key, setWatchlistStockInfo)
@@ -25,8 +24,7 @@ const Watchlist = () => {
     return <PageTemplate>
         <CustomHeading>Watchlist</CustomHeading>
         {user ?
-            isLoading ? <LoadingSpinner/> :
-                <StockInfoTable stocks={watchlistStockInfo} handleSortClick={handleSortClick}/>
+            <StockInfoTable stocks={watchlistStockInfo} handleSortClick={handleSortClick}/>
             : <CustomBox>
                 {/*TODO: trigger sign in popup from 'Sign in'*/}
                 <Center fontSize="xl" mx={8} my={4}>Sign in to use watchlist</Center>
