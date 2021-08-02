@@ -1,4 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react'
+import {useStateWithCallbackLazy} from 'use-state-with-callback';
+
 import axios from "axios";
 
 const StockInfoContext = createContext({});
@@ -11,6 +13,7 @@ const StockInfoProvider = ({children}) => {
     const [quarterlyStockDetails, setQuarterlyStockDetails] = useState({});
     const [stockName, setStockName] = useState('')
     const [graphData, setGraphData] = useState('')
+    const [isLoading, setIsLoading] = useStateWithCallbackLazy(false)
 
     useEffect(() => {
         axios.get(`/stock-details/`).then(response => {
@@ -23,8 +26,11 @@ const StockInfoProvider = ({children}) => {
         if (!tickerString)
             return setWatchlistStockInfo([])
 
-        axios.get(`/stock-details/${tickerString}`).then(response => {
-            setWatchlistStockInfo(response.data)
+        setIsLoading(true, () => {
+            axios.get(`/stock-details/${tickerString}`).then(response => {
+                setWatchlistStockInfo(response.data)
+                setIsLoading(false, null)
+            })
         })
     }
 
@@ -83,6 +89,7 @@ const StockInfoProvider = ({children}) => {
             watchlistStockInfo,
             setBasicStockInfo,
             setWatchlistStockInfo,
+            isLoading,
             getWatchlistStockInfo,
             setRealtimeDetails,
             setQuarterlyDetails,
