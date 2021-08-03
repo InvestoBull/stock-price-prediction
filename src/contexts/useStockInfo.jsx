@@ -1,121 +1,140 @@
-import React, {createContext, useContext, useEffect, useState} from 'react'
-import {useStateWithCallbackLazy} from 'use-state-with-callback';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useStateWithCallbackLazy } from "use-state-with-callback";
 
 import axios from "axios";
 
 const StockInfoContext = createContext({});
 
-const StockInfoProvider = ({children}) => {
-    const [basicStockInfo, setBasicStockInfo] = useState([])
-    const [watchlistStockInfo, setWatchlistStockInfo] = useState([])
+const StockInfoProvider = ({ children }) => {
+    const [basicStockInfo, setBasicStockInfo] = useState([]);
+    const [watchlistStockInfo, setWatchlistStockInfo] = useState([]);
     const [realtimeStockDetails, setRealtimeStockDetails] = useState({});
     const [quarterlyStockDetails, setQuarterlyStockDetails] = useState({});
-    const [stockName, setStockName] = useState('')
-    const [graphData, setGraphData] = useState('')
-    const [isLoading, setIsLoading] = useStateWithCallbackLazy(false)
-    const [isStockInfoTableLoading, setIsStockInfoTableLoading] = useStateWithCallbackLazy(false)
-    const [isRealtimeDataLoading, setIsRealtimeDataLoading] = useStateWithCallbackLazy(false)
-    const [isQuarterlyDataLoading, setIsQuarterlyDataLoading] = useStateWithCallbackLazy(false)
-    const [isStockGraphLoading, setIsStockGraphLoading] = useStateWithCallbackLazy(false)
+    const [stockName, setStockName] = useState("");
+    const [graphData, setGraphData] = useState("");
+    const [isLoading, setIsLoading] = useStateWithCallbackLazy(false);
+    const [isStockInfoTableLoading, setIsStockInfoTableLoading] =
+        useStateWithCallbackLazy(false);
+    const [isRealtimeDataLoading, setIsRealtimeDataLoading] =
+        useStateWithCallbackLazy(false);
+    const [isQuarterlyDataLoading, setIsQuarterlyDataLoading] =
+        useStateWithCallbackLazy(false);
+    const [isStockGraphLoading, setIsStockGraphLoading] =
+        useStateWithCallbackLazy(false);
 
     useEffect(() => {
         setIsStockInfoTableLoading(true, () => {
-            axios.get(`/stock-details/`).then(response => {
-                setBasicStockInfo(response.data)
-                setIsStockInfoTableLoading(false, null)
-            })
-        })
+            axios.get(`/stock-details/`).then((response) => {
+                setBasicStockInfo(response.data);
+                setIsStockInfoTableLoading(false, null);
+            });
+        });
     }, []);
 
-    const getWatchlistStockInfo = watchlist => {
-        const tickerString = watchlist.join('-')
-        if (!tickerString)
-            return setWatchlistStockInfo([])
+    const getWatchlistStockInfo = (watchlist) => {
+        const tickerString = watchlist.join("-");
+        if (!tickerString) return setWatchlistStockInfo([]);
 
         setIsLoading(true, () => {
-            axios.get(`/stock-details/${tickerString}`).then(response => {
-                setWatchlistStockInfo(response.data)
-                setIsLoading(false, null)
-            })
-        })
-    }
+            axios.get(`/stock-details/${tickerString}`).then((response) => {
+                setWatchlistStockInfo(response.data);
+                setIsLoading(false, null);
+            });
+        });
+    };
 
-    const setRealtimeDetails = ticker => {
+    const setRealtimeDetails = (ticker) => {
         setIsRealtimeDataLoading(true, () => {
-            axios.get(`/stock-details/realtime-data/${ticker}`).then(response => {
-                setRealtimeStockDetails(response.data.stock_details);
-                setStockName(response.data.stock_name)
-                setIsRealtimeDataLoading(false, null)
-            })
-        })
-    }
+            axios
+                .get(`/stock-details/realtime-data/${ticker}`)
+                .then((response) => {
+                    setRealtimeStockDetails(response.data.stock_details);
+                    setStockName(response.data.stock_name);
+                    setIsRealtimeDataLoading(false, null);
+                });
+        });
+    };
 
-    const setQuarterlyDetails = ticker => {
+    const setQuarterlyDetails = (ticker) => {
         setIsQuarterlyDataLoading(true, () => {
-            axios.get(`/stock-details/quarterly-data/${ticker}`).then(response => {
-                setQuarterlyStockDetails(response.data.stock_details);
-                setStockName(response.data.stock_name)
-                setIsQuarterlyDataLoading(false, null)
-            })
-        })
-    }
+            axios
+                .get(`/stock-details/quarterly-data/${ticker}`)
+                .then((response) => {
+                    setQuarterlyStockDetails(response.data.stock_details);
+                    setStockName(response.data.stock_name);
+                    setIsQuarterlyDataLoading(false, null);
+                });
+        });
+    };
 
-    const setRealtimeGraphData = ticker => {
+    const setRealtimeGraphData = (ticker) => {
         setIsStockGraphLoading(true, () => {
-            axios.get(`/realtime-graph/${ticker}`).then(response => {
+            axios.get(`/realtime-graph/${ticker}`).then((response) => {
                 setGraphData(response.data);
-                setIsStockGraphLoading(false, null)
-            })
-        })
-    }
+                setIsStockGraphLoading(false, null);
+            });
+        });
+    };
 
-    const filterStocks = key_word => {
-        axios.post('/stock-details/filter-stocks', JSON.stringify({
-            key_word
-        }), {headers: {'Content-Type': 'application/json'}}).then(response => {
-            setBasicStockInfo(response.data)
-        })
-    }
+    const filterStocks = (key_word) => {
+        axios
+            .post(
+                "/stock-details/filter-stocks",
+                JSON.stringify({
+                    key_word,
+                }),
+                { headers: { "Content-Type": "application/json" } }
+            )
+            .then((response) => {
+                setBasicStockInfo(response.data);
+            });
+    };
 
     const sortStocks = (stock_list, table_header_key, setInfo) => {
-        const ticker_list = stock_list.map(({ticker_id}) => ticker_id)
-        axios.post('/stock-details/sort-stocks', JSON.stringify({
-            ticker_list,
-            table_header_key
-        }), {headers: {'Content-Type': 'application/json'}}).then(response => {
-            setInfo(response.data)
-        })
-    }
+        const ticker_list = stock_list.map(({ ticker_id }) => ticker_id);
+        axios
+            .post(
+                "/stock-details/sort-stocks",
+                JSON.stringify({
+                    ticker_list,
+                    table_header_key,
+                }),
+                { headers: { "Content-Type": "application/json" } }
+            )
+            .then((response) => {
+                setInfo(response.data);
+            });
+    };
 
     return (
-        <StockInfoContext.Provider value={{
-            stockName,
-            realtimeStockDetails,
-            quarterlyStockDetails,
-            graphData,
-            basicStockInfo,
-            watchlistStockInfo,
-            setBasicStockInfo,
-            setWatchlistStockInfo,
-            isLoading,
-            isStockInfoTableLoading,
-            isRealtimeDataLoading,
-            isStockGraphLoading,
-            isQuarterlyDataLoading,
-            getWatchlistStockInfo,
-            setRealtimeDetails,
-            setQuarterlyDetails,
-            setRealtimeGraphData,
-            filterStocks,
-            sortStocks
-        }}>
+        <StockInfoContext.Provider
+            value={{
+                stockName,
+                realtimeStockDetails,
+                quarterlyStockDetails,
+                graphData,
+                basicStockInfo,
+                watchlistStockInfo,
+                setBasicStockInfo,
+                setWatchlistStockInfo,
+                isLoading,
+                isStockInfoTableLoading,
+                isRealtimeDataLoading,
+                isStockGraphLoading,
+                isQuarterlyDataLoading,
+                getWatchlistStockInfo,
+                setRealtimeDetails,
+                setQuarterlyDetails,
+                setRealtimeGraphData,
+                filterStocks,
+                sortStocks,
+            }}
+        >
             {children}
         </StockInfoContext.Provider>
-    )
-}
+    );
+};
 
-export const useStockSymbol = () => (
-    useContext(StockInfoContext)
-)
+export const useStockSymbol = () => useContext(StockInfoContext);
 
 export default StockInfoProvider;
