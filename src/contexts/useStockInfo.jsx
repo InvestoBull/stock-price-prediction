@@ -10,6 +10,7 @@ const StockInfoProvider = ({ children }) => {
     const [realtimeStockDetails, setRealtimeStockDetails] = useState({});
     const [quarterlyStockDetails, setQuarterlyStockDetails] = useState({});
     const [stockName, setStockName] = useState('');
+    const [tickerId, setTickerId] = useState('');
     const [graphData, setGraphData] = useState('');
 
     useEffect(() => {
@@ -37,6 +38,7 @@ const StockInfoProvider = ({ children }) => {
         axios.get(`/stock-details/realtime-data/${ticker}`).then((response) => {
             setRealtimeStockDetails(response.data.stock_details);
             setStockName(response.data.stock_name);
+            setTickerId(response.data.ticker_id);
         });
     };
 
@@ -46,6 +48,7 @@ const StockInfoProvider = ({ children }) => {
             .then((response) => {
                 setQuarterlyStockDetails(response.data.stock_details);
                 setStockName(response.data.stock_name);
+                setTickerId(response.data.ticker_id);
             });
     };
 
@@ -89,6 +92,7 @@ const StockInfoProvider = ({ children }) => {
         <StockInfoContext.Provider
             value={{
                 stockName,
+                tickerId,
                 stockDetails,
                 realtimeStockDetails,
                 quarterlyStockDetails,

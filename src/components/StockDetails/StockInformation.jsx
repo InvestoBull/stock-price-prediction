@@ -14,6 +14,7 @@ import {
     Tr,
     useColorModeValue,
 } from '@chakra-ui/react';
+import WatchlistButton from '../WatchlistButton';
 
 const StockDataEnclosure = ({ children }) => (
     <Box mx={4}>
@@ -115,7 +116,7 @@ const QuarterlyStockData = () => {
 };
 
 const LivePrice = () => {
-    const { stockName } = useStockSymbol();
+    const { stockName, tickerId } = useStockSymbol();
     const {
         realtimeStockDetails: { open, high, low, close, volume },
     } = useStockSymbol();
@@ -141,6 +142,9 @@ const LivePrice = () => {
                             <StatHelpText mt={2}>{currency}</StatHelpText>
                         </Stat>
                     </StatGroup>
+                </Td>
+                <Td isNumeric>
+                    <WatchlistButton ticker={tickerId} />
                 </Td>
             </Tr>
             <Tr>

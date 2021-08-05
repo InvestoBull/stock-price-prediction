@@ -3,6 +3,9 @@ import { BsStar, BsStarFill } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 import { useUser } from '../contexts/useUser';
 
+// TODO: make a Large button that says "Add to Watchlist" that works the same as the small button
+// export const WatchlistButtonLarge = { ticker };
+
 const WatchlistButton = ({ ticker }) => {
     const [icon, setIcon] = useState(<BsStar />);
     const [isWatchlisted, setIsWatchlisted] = useState(false);
@@ -12,10 +15,14 @@ const WatchlistButton = ({ ticker }) => {
         const tickers = [];
         watchlist.forEach(({ ticker }) => tickers.push(ticker));
         if (tickers.includes(ticker)) {
+            console.log(ticker + ' is in watchlist!');
             setIcon(<BsStarFill />);
             setIsWatchlisted(true);
         }
     }, [watchlist]);
+
+    // TODO: fix watchlist state problem
+    console.log(ticker, 'is in watchlist :', isWatchlisted);
 
     const handleClick = () => {
         if (!user) return; // TODO: trigger sign in popup

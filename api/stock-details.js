@@ -78,8 +78,8 @@ router.get('/stock-details/realtime-data/:ticker', function (req, res) {
     const { ticker } = req.params;
     realtimeStockInfo
         .findOne({ ticker_id: ticker })
-        .then(({ stock_name, stock_details }) => {
-            res.send({ stock_name, stock_details });
+        .then(({ stock_name, ticker_id, stock_details }) => {
+            res.send({ stock_name, ticker_id, stock_details });
         })
         .catch(({ message }) => {
             console.log(message);
@@ -92,8 +92,8 @@ router.get('/stock-details/quarterly-data/:ticker', function (req, res) {
     const { ticker } = req.params;
     quarterlyStockInfo
         .findOne({ ticker_id: ticker })
-        .then(({ stock_name, stock_details }) => {
-            res.send({ stock_name, stock_details });
+        .then(({ stock_name, ticker_id, stock_details }) => {
+            res.send({ stock_name, ticker_id, stock_details });
         })
         .catch(({ message }) => {
             console.log(message);
