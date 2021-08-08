@@ -1,15 +1,14 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const { stockMarketInfo } = require('../dal/stock-markets');
+const { stockMarketInfo, predictedStockInfo } = require('../dal/stock-markets');
 const NewsAPI = require('newsapi');
 const stockDataApiKey = new NewsAPI(process.env.STOCK_DATA_API_KEY);
 
 const cron = require('node-cron');
 const axios = require('axios');
-const { dailyGraphInfo } = require('../dal/stock-markets');
 
 cron.schedule(
-    '0 0 0 * * *',
+    '0 0 0 * * *', // run every day at midnight
     async () => {
         const doc = await stockMarketInfo.find({});
         for (let market_data of doc) {
@@ -19,9 +18,10 @@ cron.schedule(
                     ticker_id: stock_data.ticker,
                 });
 
-                const dailyStockDataFromApi = await getStockDataFromApi(
-                    stock_data
-                );
+                const dailyStockPredictionScoreDataFromApi =
+                    await getStockPredictionScoreDatafromApi();
+                // stock_data
+                // pass these variables in date, volume, open, high, low
                 const timeSeriesData =
                     dailyStockDataFromApi['Time Series (Daily)'];
 
@@ -83,11 +83,12 @@ const getStockPredictionScoreDatafromApi = async ({
 
     // make the request for scoringUri, inputData, headers=headers
     const { scoreData } = await axios.post(scoringUri, inputData);
+    console.log('Prediction Score: ', scoreData);
     return scoreData;
 };
 
-const getStockDataFromApi = async ({ ticker }) => {
-    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${stockDataApiKey}`;
-    const { data } = await axios.get(url);
-    return data;
-};
+// const getStockDataFromApi = async ({ ticker }) => {
+//     const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${stockDataApiKey}`;
+//     const { data } = await axios.get(url);
+//     return data;
+// };

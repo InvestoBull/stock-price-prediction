@@ -12,6 +12,7 @@ const stockPredictionSchema = new Schema(
         revenueGrowth: Number,
         eps: Number,
         marketCap: Number,
+        closingPrice: Number,
     },
     { collection: 'StockPrediction' }
 );
