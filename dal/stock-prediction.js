@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const { Decimal128 } = require('mongodb');
 dotenv.config();
 
 const Schema = mongoose.Schema;
@@ -12,7 +13,7 @@ const stockPredictionSchema = new Schema(
         revenueGrowth: Number,
         eps: Number,
         marketCap: Number,
-        closingPrice: Number,
+        closingPrice: Decimal128,
     },
     { collection: 'StockPrediction' }
 );

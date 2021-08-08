@@ -9,6 +9,7 @@ const defaultPredictions = {
     revenueGrowth: 0,
     eps: 0,
     marketCap: 0,
+    closingPrice: 0.0,
 };
 
 /* GET prediction details. */
