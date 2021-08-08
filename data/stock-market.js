@@ -5,8 +5,60 @@ const MARKET_DATA = [
         market_name: 'Nasdaq',
         stocks: [
             {
+                ticker: 'NVDA',
+                name: 'Nvidia',
+            },
+            {
+                ticker: 'PYPL',
+                name: 'PayPal',
+            },
+            {
+                ticker: 'MSFT',
+                name: 'Microsoft',
+            },
+            {
+                ticker: 'ADBE',
+                name: 'Adobe',
+            },
+            {
+                ticker: 'PEP',
+                name: 'PepsiCo',
+            },
+            {
+                ticker: 'UBER',
+                name: 'Uber',
+            },
+            {
+                ticker: 'NFLX',
+                name: 'Netflix',
+            },
+            {
+                ticker: 'CMCSA',
+                name: 'Comcast Corporation',
+            },
+            {
+                ticker: 'INTC',
+                name: 'Intel Corporation',
+            },
+            {
                 ticker: 'TSLA',
                 name: 'Tesla',
+            },
+            {
+                ticker: 'CSCO',
+                name: 'Cisco Systems',
+            },
+            {
+                ticker: 'AVGO',
+                name: 'Broadcom',
+            },
+            {
+                ticker: 'QCOM',
+                name: 'Qualcomm',
+            },
+            {
+                ticker: 'COST',
+                name: 'Costco Wholesale Corporation',
             },
             {
                 ticker: 'AMZN',
@@ -21,12 +73,16 @@ const MARKET_DATA = [
                 name: 'Facebook',
             },
             {
+                ticker: 'TXN',
+                name: 'Texas Instruments',
+            },
+            {
                 ticker: 'TWTR',
                 name: 'Twitter',
             },
             {
-                ticker: 'UBER',
-                name: 'Uber',
+                ticker: 'AAPL',
+                name: 'Apple',
             },
         ],
     },
@@ -40,7 +96,7 @@ for (const data of MARKET_DATA) {
             const stockMarketData = new stockMarketInfo(data);
             stockMarketData.save().then((marketData) => {
                 console.log(marketData);
-                process.exit(1);
+                // process.exit(1);
             });
         } else {
             stockMarketInfo
@@ -52,7 +108,7 @@ for (const data of MARKET_DATA) {
                 )
                 .then(() => {
                     console.log('Update successful');
-                    process.exit(1);
+                    // process.exit(1);
                 });
         }
     });
