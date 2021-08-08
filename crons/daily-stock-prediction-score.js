@@ -1,14 +1,12 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const { stockMarketInfo, predictedStockInfo } = require('../dal/stock-markets');
-const NewsAPI = require('newsapi');
-const stockDataApiKey = new NewsAPI(process.env.STOCK_DATA_API_KEY);
 
 const cron = require('node-cron');
 const axios = require('axios');
 
 cron.schedule(
-    '0 0 0 * * *',
+    '0 0 0 * * *', // runs every day at midnight
     async () => {
         const doc = await stockMarketInfo.find({});
         for (let market_data of doc) {
