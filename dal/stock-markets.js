@@ -53,11 +53,10 @@ const predictedStockInfoSchema = new Schema(
         stock_id: String,
         prediction_details: {
             timestamp: Date,
-            high: Number,
-            close: Number,
+            volume: Number,
             open: Number,
-            close: Number,
-            volume_traded: Number,
+            high: Number,
+            low: Number,
         },
     },
     { collection: 'PredictedStockInfo' }

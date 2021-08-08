@@ -1,10 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const { stockMarketInfo, quarterlyStockInfo } = require('../dal/stock-markets');
-const {
-    stockPredictionInfo,
-    stockPrediction,
-} = require('../dal/stock-prediction');
+const { stockMarketInfo, predictedStockInfo } = require('../dal/stock-markets');
 const NewsAPI = require('newsapi');
 const stockDataApiKey = new NewsAPI(process.env.STOCK_DATA_API_KEY);
 
@@ -18,11 +14,13 @@ cron.schedule(
         for (let market_data of doc) {
             for (let stock_data of market_data.stocks) {
                 console.log(`Processing data for ${stock_data.ticker}`);
-                const stockPredictionInfoForTicker =
-                    await stockPredictionInfo.findOne({
+                const predictedStockInfoForTicker =
+                    await predictedStockInfo.findOne({
                         ticker: stock_data.ticker,
                     });
 
+                // TODO: setup cron job to change volume, open, high, low for premium users by multiplying some percentage
+                // TODO: for unlimited users use sliders to let the user tweek the input values for volume, open, high, low
                 // TODO: need to pass in date, volume, open, high, low
                 const predictedClosingPriceDataFromApi =
                     await getStockPredictionScoreDatafromApi(
@@ -34,8 +32,8 @@ cron.schedule(
                     );
 
                 // TODO: Might need to create new variable depending on response structure of predictedClosingPriceDataFromApi
-                if (stockPredictionInfoForTicker) {
-                    await stockPredictionInfo.updateOne(
+                if (predictedStockInfoForTicker) {
+                    await predictedStockInfo.updateOne(
                         { ticker: stock_data.ticker },
                         {
                             closingPrice: predictedClosingPriceDataFromApi,
@@ -43,7 +41,7 @@ cron.schedule(
                     );
                     console.log('Update successful');
                 } else {
-                    const stockPredictionData = new stockPredictionInfo({
+                    const stockPredictionData = new predictedStockInfo({
                         company_name: stock_data.name,
                         ticker: stock_data.ticker,
                         inflation: 0,
