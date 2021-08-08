@@ -1,3 +1,4 @@
+const { Decimal128 } = require('mongodb');
 const mongoose = require('mongoose');
 
 mongoose.connect(process.env.STOCK_MARKET_MONGO_DB_CONNECTION_STRING, {
@@ -52,6 +53,8 @@ const predictedStockInfoSchema = new Schema(
         stock_id: String,
         prediction_details: {
             timestamp: Date,
+            high: Number,
+            close: Number,
             open: Number,
             close: Number,
             volume_traded: Number,
