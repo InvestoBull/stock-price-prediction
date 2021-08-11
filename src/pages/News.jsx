@@ -1,80 +1,72 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import PageTemplate from '../components/PageTemplate/PageTemplate';
 import ChecklistDrawer from '../components/News/ChecklistDrawer';
 import CustomHeading from '../components/CustomHeading';
-import StaticChecklistContainer from '../components/News/StaticChecklistContainer';
-import {Grid, VStack} from '@chakra-ui/react';
-import {useStockNews} from '../contexts/useStockNews';
-import {useUser} from '../contexts/useUser';
-import StockNewsCard from '../components/News/StockNewsCard';
+import { Flex, Grid, VStack } from '@chakra-ui/react';
+import { useStockNews } from '../contexts/useStockNews';
+import { useUser } from '../contexts/useUser';
 import NewsCardList from '../components/News/NewsCardList';
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from '../components/LoadingSpinner';
+import StickyChecklistContainer from '../components/News/StickyChecklistContainer';
+import StockNewsCardList from '../components/News/StockNewsCardList';
 
 const News = () => {
     const {
-        setNewsSelectionsFromFirebase,
         setNewsInfoFromMongo,
         isDisplayingWatchlistStockNews,
         isNewsSelectionsFromFirebaseLoading,
         isNewsSelectionsFromMongoLoading,
         isStockNewsLoading,
-        stockListNews,
-        getStockListNews
+        getStockListNews,
     } = useStockNews();
 
-    const {user, watchlist} = useUser();
+    const { user, watchlist } = useUser();
 
     useEffect(() => {
-        setNewsSelectionsFromFirebase();
         setNewsInfoFromMongo();
     }, []);
 
     useEffect(() => {
         const tickers = [];
-        watchlist.forEach(({ticker}) => tickers.push(ticker));
+        watchlist.forEach(({ ticker }) => tickers.push(ticker));
         getStockListNews(tickers);
     }, [watchlist]);
 
     return (
         <PageTemplate>
-            <VStack>
-                <CustomHeading mb={3}>News</CustomHeading>
-                {isNewsSelectionsFromFirebaseLoading || isNewsSelectionsFromMongoLoading || isStockNewsLoading ?
-                    <LoadingSpinner/> :
-                    <>
-                        <Grid display={['flex', 'flex', 'none', 'none']}>
-                            <ChecklistDrawer/>
+            <CustomHeading mb={3}>News</CustomHeading>
+            {isNewsSelectionsFromFirebaseLoading ||
+            isNewsSelectionsFromMongoLoading ||
+            isStockNewsLoading ? (
+                <LoadingSpinner />
+            ) : (
+                <>
+                    <Flex display={['none', 'none', 'none', 'flex']}>
+                        <StickyChecklistContainer />
+                        <VStack>
+                            {user && isDisplayingWatchlistStockNews ? (
+                                <StockNewsCardList />
+                            ) : (
+                                <NewsCardList />
+                            )}
+                        </VStack>
+                    </Flex>
+                    <VStack>
+                        <Grid display={['flex', 'flex', 'flex', 'none']}>
+                            <ChecklistDrawer />
                         </Grid>
-                        <Grid display={['none', 'none', 'flex', 'flex']}>
-                            <StaticChecklistContainer/>
-                            <VStack>
-                                {user && isDisplayingWatchlistStockNews ? (
-                                    stockListNews.map(({stock_name, news}) => {
-                                        return (
-                                            <StockNewsCard name={stock_name} news={news}/>
-                                        );
-                                    })
-                                ) : (
-                                    <NewsCardList/>
-                                )}
-                            </VStack>
-                        </Grid>
-                        <Grid display={['flex', 'flex', 'none', 'none']}>
-                            <VStack>
-                                {user && isDisplayingWatchlistStockNews ? (
-                                    stockListNews.map(({stock_name, news}) => {
-                                        return (
-                                            <StockNewsCard name={stock_name} news={news}/>
-                                        );
-                                    })
-                                ) : (
-                                    <NewsCardList/>
-                                )}
-                            </VStack>
-                        </Grid>
-                    </>
-                }
-            </VStack>
+                    </VStack>
+                    <Grid display={['flex', 'flex', 'flex', 'none']}>
+                        <VStack>
+                            {user && isDisplayingWatchlistStockNews ? (
+                                <StockNewsCardList />
+                            ) : (
+                                <NewsCardList />
+                            )}
+                        </VStack>
+                    </Grid>
+                </>
+            )}
         </PageTemplate>
     );
 };
